@@ -19,7 +19,38 @@
     <fragment android:id="@+id/navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:name="info.jaredq.prepareenglishinterview.NavigationDrawerFragment"
+        android:name="info.jaredq.ppiv.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
 
+    <!--
+    <fragment android:id="@+id/action_questions_and_tips"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="info.jaredq.ppiv.QuestionsAndTipsFragment"
+        tools:layout="@layout/fragment_questions_and_tips" />
+
+    <fragment android:id="@+id/action_my_answers"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="info.jaredq.ppiv.MyAnswersFragment"
+        tools:layout="@layout/fragment_my_answers" />
+
+    <fragment android:id="@+id/action_profile"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="info.jaredq.ppiv.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment android:id="@+id/action_settings"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="info.jaredq.ppiv.SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment android:id="@+id/action_help"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="info.jaredq.ppiv.HelpFragment"
+        tools:layout="@layout/fragment_help" />
+    -->
 </android.support.v4.widget.DrawerLayout>
