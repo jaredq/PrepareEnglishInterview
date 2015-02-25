@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,21 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import info.jaredq.ppiv.dummy.DummyContent;
-import info.jaredq.ppiv.models.Forum;
-import info.jaredq.ppiv.models.ForumHelper;
+import info.jaredq.ppiv.models.Thread;
+import info.jaredq.ppiv.models.ThreadHelper;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of threads.
  * <p/>
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
@@ -36,7 +28,17 @@ import info.jaredq.ppiv.models.ForumHelper;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class QuestionsAndTipsFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ThreadsFragment extends Fragment implements AbsListView.OnItemClickListener {
+
+    /**
+     *
+     */
+    private static final String KEY_FORUM_ID = "FORUM_ID";
+
+    /**
+     *
+     */
+    private int mForumId;
 
     private OnFragmentInteractionListener mListener;
 
@@ -52,34 +54,19 @@ public class QuestionsAndTipsFragment extends Fragment implements AbsListView.On
     private ListAdapter mAdapter;
 
     /**
-     * The AsyncTask for getting forum list
+     * The thread list
      */
-    private AsyncTask mGetForumListAT;
+    List<Thread> mThreadList;
 
     /**
-     * The list of forum
+     * the get thread list AsyncTask
      */
-    private List<Forum> mForumList;
+    AsyncTask mGetThreadListAT;
 
-    /**
-     * @return
-     */
-    public static QuestionsAndTipsFragment newInstance() {
-        QuestionsAndTipsFragment fragment = new QuestionsAndTipsFragment();
+    public static ThreadsFragment newInstance(int forumId) {
+        ThreadsFragment fragment = new ThreadsFragment();
         Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
-    public static QuestionsAndTipsFragment newInstance(int sectionNumber) {
-        QuestionsAndTipsFragment fragment = new QuestionsAndTipsFragment();
-        Bundle args = new Bundle();
-        args.putInt(MainFragmentHelper.ARG_SECTION_NUMBER, sectionNumber);
+        args.putInt(KEY_FORUM_ID, forumId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,7 +75,7 @@ public class QuestionsAndTipsFragment extends Fragment implements AbsListView.On
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public QuestionsAndTipsFragment() {
+    public ThreadsFragment() {
     }
 
     @Override
@@ -96,29 +83,23 @@ public class QuestionsAndTipsFragment extends Fragment implements AbsListView.On
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            // TODO reed arguments
-
+            mForumId = getArguments().getInt(KEY_FORUM_ID);
         }
 
-    }
+}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_questions_and_tips, container, false);
+        View view = inflater.inflate(R.layout.fragment_threads, container, false);
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
 
+        mGetThreadListAT = new GetThreadListAT().execute(mForumId);
+
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-
-        mGetForumListAT = new GetForumListAT().execute(Forum.CATEGORY_ID_QUESTIONS);
-
-//        List<Forum> items = ForumHelper.getForumList(Forum.CATEGORY_ID_QUESTIONS);
-//        mAdapter = new ArrayAdapter<Forum>(getActivity(),
-//                android.R.layout.simple_list_item_1, android.R.id.text1, items);
-//        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         return view;
     }
@@ -128,9 +109,6 @@ public class QuestionsAndTipsFragment extends Fragment implements AbsListView.On
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
-
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(MainFragmentHelper.ARG_SECTION_NUMBER));
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -149,7 +127,7 @@ public class QuestionsAndTipsFragment extends Fragment implements AbsListView.On
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onForumClick(mForumList.get(position).getFid());
+            mListener.onThreadClick(mThreadList.get(position).getTid());
         }
     }
 
@@ -166,13 +144,13 @@ public class QuestionsAndTipsFragment extends Fragment implements AbsListView.On
         }
     }
 
-    private class GetForumListAT extends AsyncTask<Integer, Integer, List<Forum>> {
+    private class GetThreadListAT extends AsyncTask<Integer, Integer, List<Thread>> {
 
         @Override
-        protected List<Forum> doInBackground(Integer... params) {
-            mForumList = ForumHelper.getForumList(params[0]);
+        protected List<Thread> doInBackground(Integer... params) {
+            mThreadList = ThreadHelper.getThreadList(params[0]);
 
-            return mForumList;
+            return mThreadList;
         }
 
         @Override
@@ -181,14 +159,15 @@ public class QuestionsAndTipsFragment extends Fragment implements AbsListView.On
         }
 
         @Override
-        protected void onPostExecute(List<Forum> o) {
+        protected void onPostExecute(List<Thread> o) {
             super.onPostExecute(o);
 
-            List<Forum> items = (List<Forum>) o;
-            mAdapter = new ArrayAdapter<Forum>(getActivity(),
+            List<Thread> items = (List<Thread>) o;
+            mAdapter = new ArrayAdapter<Thread>(getActivity(),
                     android.R.layout.simple_list_item_1, android.R.id.text1, items);
 
             ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
         }
     }
+
 }

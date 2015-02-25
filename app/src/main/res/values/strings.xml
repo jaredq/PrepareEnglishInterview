@@ -2,6 +2,7 @@
     <string name="app_title">Prepare Interview</string>
     <string name="app_name">Prepare Interview</string>
 
+    <string name="title_welcome">Prepare Interview</string>
     <string name="title_questions_and_tips">Questions &amp; tips</string>
     <string name="title_my_answers">My answers</string>
     <string name="title_profile">Profile</string>
@@ -16,7 +17,8 @@
     <string name="action_settings">Settings</string>
 
 <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_to_prepare_interview">Welcome to Prepare Interview</string>
     <string name="hello_profile_fragment">Hello Profile</string>
     <string name="hello_settings_fragment">Hello Settings</string>
+    <string name="hello_blank_fragment">Hello</string>
 </resources>

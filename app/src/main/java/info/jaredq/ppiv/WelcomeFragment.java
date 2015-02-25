@@ -2,17 +2,17 @@ package info.jaredq.ppiv;
 
 import android.app.Activity;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 /**
- * A profile fragment.
+ * A simple {@link Fragment} subclass.
  */
-public class ProfileFragment extends Fragment {
+public class WelcomeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
@@ -20,15 +20,11 @@ public class ProfileFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * @return A new instance of fragment WelcomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static WelcomeFragment newInstance() {
+        WelcomeFragment fragment = new WelcomeFragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -37,15 +33,15 @@ public class ProfileFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static ProfileFragment newInstance(int sectionNumber) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static WelcomeFragment newInstance(int sectionNumber) {
+        WelcomeFragment fragment = new WelcomeFragment();
         Bundle args = new Bundle();
         args.putInt(MainFragmentHelper.ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public ProfileFragment() {
+    public WelcomeFragment() {
         // Required empty public constructor
     }
 
@@ -62,8 +58,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_welcome, container, false);
     }
 
     @Override
@@ -71,9 +66,6 @@ public class ProfileFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
-
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(MainFragmentHelper.ARG_SECTION_NUMBER));
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");

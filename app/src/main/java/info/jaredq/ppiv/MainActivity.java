@@ -1,6 +1,7 @@
 package info.jaredq.ppiv;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -51,9 +52,7 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-//                .commit();
+
         fragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragmentHelper.newInstance(position + 1))
                 .commit();
@@ -62,18 +61,21 @@ public class MainActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_questions_and_tips);
+                mTitle = getString(R.string.title_welcome);
                 break;
             case 2:
-                mTitle = getString(R.string.title_my_answers);
+                mTitle = getString(R.string.title_questions_and_tips);
                 break;
             case 3:
-                mTitle = getString(R.string.title_profile);
+                mTitle = getString(R.string.title_my_answers);
                 break;
             case 4:
-                mTitle = getString(R.string.title_settings);
+                mTitle = getString(R.string.title_profile);
                 break;
             case 5:
+                mTitle = getString(R.string.title_settings);
+                break;
+            case 6:
                 mTitle = getString(R.string.title_help);
                 break;
         }
@@ -117,6 +119,34 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onFragmentInteraction(String id) {
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onForumClick(int id) {
+
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, ThreadsFragment.newInstance(id))
+                .commit();
+    }
+
+    @Override
+    public void onThreadClick(int id) {
+
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, PostsFragment.newInstance(id))
+                .commit();
 
     }
 

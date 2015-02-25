@@ -23,21 +23,25 @@ public class MainFragmentHelper {
         switch (number) {
             case 1:
                 //questions_and_tips
-                fragment = QuestionsAndTipsFragment.newInstance(number);
+                fragment = WelcomeFragment.newInstance(number);
                 break;
             case 2:
+                //questions_and_tips
+                fragment = QuestionsAndTipsFragment.newInstance(number);
+                break;
+            case 3:
                 // my answers
                 fragment = MyAnswersFragment.newInstance(number);
                 break;
-            case 3:
+            case 4:
                 // profile
                 fragment = ProfileFragment.newInstance(number);
                 break;
-            case 4:
+            case 5:
                 // settings
                 fragment = SettingsFragment.newInstance(number);
                 break;
-            case 5:
+            case 6:
                 // help
                 fragment = HelpFragment.newInstance(number);
                 break;
